@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="background">#1E272C</color>
+    <color name="barColor">#1E2122</color>
 </resources>

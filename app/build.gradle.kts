@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
@@ -52,5 +51,7 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-auth")
     implementation ("com.google.firebase:firebase-analytics-ktx")
+    implementation ("com.google.android.gms:play-services-auth:20.6.0")
+    implementation ("androidx.recyclerview:recyclerview:1.3.1")
 
 }

@@ -9,13 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.util.Objects;
 
@@ -26,7 +26,8 @@ public class signup extends AppCompatActivity {
     FirebaseAuth mAuth;
     ProgressBar bar;
 
-
+//for google signIn
+    com.google.android.gms.common.SignInButton GoogleSignInBtn;
     @Override public void onStart(){
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -42,8 +43,17 @@ public class signup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
         mAuth = FirebaseAuth.getInstance(Objects.requireNonNull(FirebaseApp.initializeApp(this))); // Initialize Firebase
+
+//        for google sign in
+        GoogleSignInBtn = findViewById(R.id.btnGoogleSignIn);
+        GoogleSignInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(signup.this, GoogleSignIn1.class);
+                startActivity(intent);
+            }
+        });
 
         editName = findViewById(R.id.name);
         editEmail = findViewById(R.id.email);
@@ -78,7 +88,7 @@ public class signup extends AppCompatActivity {
                 Toast.makeText(signup.this,name + email,Toast.LENGTH_SHORT).show();
                 // Call the signIn method
                 bar.setVisibility(View.VISIBLE);
-                signInWithEmailAndPassword(email, password);
+                signInWithEmailAndPassword(email, password,name);
             }
             else{
                     Toast.makeText(signup.this,"Please, Enter password and ConfirmPassword correctly",Toast.LENGTH_SHORT).show();
@@ -93,14 +103,25 @@ public class signup extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void signInWithEmailAndPassword(String email, String password) {
+    private void signInWithEmailAndPassword(String email, String password,String name) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(signup.this,"SignIn SuccessFully!",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(signup.this, Login.class);
-                    startActivity(intent);
+//
+//                  FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(name)
+                            .build();
+                    assert user != null;
+                    user.updateProfile(profileUpdates);
+
+                    startActivity(new Intent(signup.this, DashBoard.class));
+
                 }else {
                     Toast.makeText(signup.this,"SignIn Unsuccessful, Please try again!",Toast.LENGTH_SHORT).show();
                 }

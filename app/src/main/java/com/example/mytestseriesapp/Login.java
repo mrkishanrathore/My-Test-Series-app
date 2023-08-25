@@ -26,6 +26,7 @@ public class Login extends AppCompatActivity {
     ProgressBar bar;
     FirebaseAuth mAuth;
 
+    com.google.android.gms.common.SignInButton GoogleSignInBtn;
 @Override public void onStart(){
     super.onStart();
     FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -73,6 +74,14 @@ public class Login extends AppCompatActivity {
 
         });
 
+        GoogleSignInBtn = findViewById(R.id.btnGoogleSignIn);
+        GoogleSignInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Login.this, GoogleSignIn1.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void SignIn(View v){
